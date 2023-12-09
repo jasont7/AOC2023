@@ -1,5 +1,4 @@
 package day5;
-import day5.Tuple;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -9,17 +8,28 @@ import java.util.Scanner;
 
 public class SeedRanges {
 
+    private static final String INPUT_FILE = "day5/in.txt";
+
     public static void main(String[] args) {
         List<Tuple<Long, Long>> ranges = getRanges();
+
+        for (Tuple<Long, Long> range : ranges) {
+            long rangeStart = range.x;
+            long rangeEnd = range.x + range.y - 1;
+            System.out.println("(" + rangeStart + ", " + rangeEnd + ")");
+
+            List<Tuple<Long, Long>> splits = rangeSplits(rangeStart, rangeEnd, 0);
+            System.out.println("splits: " + splits);
+            System.out.println();
+        }
 
         List<Long> locations = new ArrayList<>(); // will contain the min location for each range
         for (Tuple<Long, Long> range : ranges) {
             long rangeStart = range.x;
-            long rangeEnd = range.x + range.y;
+            long rangeEnd = range.x + range.y - 1;
             locations.add(getMinLocationInRange(rangeStart, rangeEnd, 0));
         }
         System.out.println(locations);
-
         long minLocation = Collections.min(locations);
         System.out.println(minLocation);
     }
@@ -28,7 +38,7 @@ public class SeedRanges {
         List<Tuple<Long, Long>> ranges = new ArrayList<>();
 
         try {
-            File inputFile = new File("day5/in.txt");
+            File inputFile = new File(INPUT_FILE);
             Scanner scanner = new Scanner(inputFile);
     
             // get seeds
@@ -56,7 +66,7 @@ public class SeedRanges {
         long nextMapping = seed;
         
         try {
-            File inputFile = new File("day5/in.txt");
+            File inputFile = new File(INPUT_FILE);
             Scanner scanner = new Scanner(inputFile);
             for (int i = 0; i < 3; i++) // skip to the first mapping line
                 scanner.nextLine();
@@ -101,7 +111,7 @@ public class SeedRanges {
         List<Tuple<Long, Long>> splits = new ArrayList<>();
 
         try {
-            File inputFile = new File("day5/in.txt");
+            File inputFile = new File(INPUT_FILE);
             Scanner scanner = new Scanner(inputFile);
             for (int i = 0; i < 3; i++) // skip to the first mapping line
                 scanner.nextLine();
@@ -119,12 +129,12 @@ public class SeedRanges {
     
                     try {
                         String[] vals = line.split(" ");
-                        long y = Long.parseLong(vals[0]);
+                        // long y = Long.parseLong(vals[0]);
                         long x = Long.parseLong(vals[1]);
                         long n = Long.parseLong(vals[2]);
                         if (x >= rangeStart && x <= rangeEnd) {
                             long splitStart = x;
-                            long splitEnd = Math.min(x + n, rangeEnd);
+                            long splitEnd = Math.min(x + n - 1, rangeEnd);
                             splits.add(new Tuple<Long, Long>(splitStart, splitEnd));
                         }
                     } catch (NumberFormatException e) {
