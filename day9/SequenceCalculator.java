@@ -16,8 +16,8 @@ public class SequenceCalculator {
                 for (String part : parts)
                     seq.add(Integer.parseInt(part));
                     
-                // sum += nextVal1(seq);  // part 1
-                sum += nextVal2(seq);  // part 2
+                // sum += nextVal(seq);  // part 1
+                sum += prevVal(seq);  // part 2
             }
             scanner.close();
 
@@ -35,15 +35,15 @@ public class SequenceCalculator {
         return result;
     }
 
-    private static int nextVal1(List<Integer> seq) {
+    private static int nextVal(List<Integer> seq) {
         if (seq.stream().allMatch(v -> v == 0))
             return 0;
-        return seq.get(seq.size() - 1) + nextVal2(nextSeq(seq));
+        return seq.get(seq.size() - 1) + nextVal(nextSeq(seq));
     }
 
-    private static int nextVal2(List<Integer> seq) {
+    private static int prevVal(List<Integer> seq) {
         if (seq.stream().allMatch(v -> v == 0))
             return 0;
-        return seq.get(0) - nextVal2(nextSeq(seq));
+        return seq.get(0) - prevVal(nextSeq(seq));
     }
 }
